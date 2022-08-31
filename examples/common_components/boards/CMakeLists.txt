@@ -11,6 +11,8 @@ elseif(CONFIG_BOARD_ESP32_LCDKIT)
     set(boards_dir "esp32-lcdkit")
 elseif(CONFIG_BOARD_ESP32_M5STACK)
     set(boards_dir "esp32-m5stack")
+elseif(CONFIG_BOARD_NSCREEN_32)
+    set(boards_dir "nscreen-32")
 endif()
 
 message(STATUS "-----------Board Info---------")
