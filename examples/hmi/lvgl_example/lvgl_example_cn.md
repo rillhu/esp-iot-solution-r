@@ -33,6 +33,7 @@ IRQ | 33
 
 - 进入到 `examples/hmi/lvgl_example` 目录下
 - 运行 `make defconfig`(Make) 或者 `idf.py defconfig`(CMake) 使用默认配置
+- board选择NSCREEN，LVGL选项中去掉touch screen支持，flash大小选择16M
 - 运行 `make menuconfig`(Make) 或者 `idf.py menuconfig`(CMake) 进行相关配置，你可以在 `Example Configuration → Choose LVGL Demo to Run` 中选择运行不同的示例
 - 运行 `make -j8 flash`(Make) 或者 `idf.py flash`(CMake) 编译、烧录程序到设备
 

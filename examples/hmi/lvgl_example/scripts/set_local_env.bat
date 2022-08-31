@@ -22,7 +22,7 @@ REM Set ESP_IDF_PATH.
 SET ESP_IDF_PATH=C:\ZCodes\SDKs\esp-idf-v4.3.1
 ECHO ESP_IDF_PATH=%ESP_IDF_PATH%
 
-SET IOT_SOLUTION_PATH=c:\ZCodes\Git\esp-iot-solution-feeeb6
+SET IOT_SOLUTION_PATH=c:\ZCodes\Git\esp-iot-solution-r
 ECHO IOT_SOLUTION_PATH=%IOT_SOLUTION_PATH%
 
 

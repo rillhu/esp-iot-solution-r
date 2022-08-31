@@ -14,6 +14,10 @@ In this example, we configure a screen with spi or 8080 interface and then:
 * A suitable LCD module to plug in ESP32-LCDKit
 * A USB cable for power supply and programming
 
+
+
+- idf.py menuconfig select board NSCREEN_32, flash = 16M, 
+
 ### Build and Flash
 
 Build the project and flash it to the board, then run monitor tool to view serial output:
