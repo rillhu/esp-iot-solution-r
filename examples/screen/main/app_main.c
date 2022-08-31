@@ -28,7 +28,7 @@ static const char *TAG = "screen example";
  */
 
 /** If you use a spi interface screen, set the USE_SPI_SCREEN to 1, otherwise use 8080 interface. */
-#define USE_SPI_SCREEN 1
+#define USE_SPI_SCREEN 0
 
 #define MAX_ZOOM  2500
 #define ITERATION 128
@@ -280,7 +280,8 @@ void app_main(void)
     scr_interface_driver_t *iface_drv;
     scr_interface_create(SCREEN_IFACE_8080, &i2s_lcd_cfg, &iface_drv);
 
-    ret = scr_find_driver(SCREEN_CONTROLLER_ILI9806, &g_lcd);
+    //ret = scr_find_driver(SCREEN_CONTROLLER_ILI9806, &g_lcd);
+    ret = scr_find_driver(SCREEN_CONTROLLER_ST7796, &g_lcd);
     if (ESP_OK != ret) {
         return;
         ESP_LOGE(TAG, "screen find failed");
@@ -293,9 +294,11 @@ void app_main(void)
         .bckl_active_level = 1,
         .offset_hor = 0,
         .offset_ver = 0,
-        .width = 480,
-        .height = 854,
-        .rotate = SCR_SWAP_XY | SCR_MIRROR_Y, /** equal to SCR_DIR_BTLR */
+        // .width = 480,
+        // .height = 854,
+        .width = 320,
+        .height = 480,
+        .rotate = SCR_DIR_TBLR, //portrait: SCR_DIR_LRBT; landscape: SCR_DIR_TBLR
     };
     ret = g_lcd.init(&lcd_cfg);
 #endif
