@@ -39,55 +39,112 @@ static const char *TAG = "example_lvgl";
 
 void app_main()
 {
+    esp_err_t ret = ESP_OK;
     iot_board_init();
-    spi_bus_handle_t spi2_bus = iot_board_get_handle(BOARD_SPI2_ID);
+    // spi_bus_handle_t spi2_bus = iot_board_get_handle(BOARD_SPI2_ID);
 
     scr_driver_t lcd_drv;
-    touch_panel_driver_t touch_drv;
-    scr_interface_spi_config_t spi_lcd_cfg = {
-        .spi_bus = spi2_bus,
-        .pin_num_cs = BOARD_LCD_SPI_CS_PIN,
-        .pin_num_dc = BOARD_LCD_SPI_DC_PIN,
-        .clk_freq = BOARD_LCD_SPI_CLOCK_FREQ,
+    scr_info_t g_lcd_info;
+    // touch_panel_driver_t touch_drv;
+    // scr_interface_spi_config_t spi_lcd_cfg = {
+    //     .spi_bus = spi2_bus,
+    //     .pin_num_cs = BOARD_LCD_SPI_CS_PIN,
+    //     .pin_num_dc = BOARD_LCD_SPI_DC_PIN,
+    //     .clk_freq = BOARD_LCD_SPI_CLOCK_FREQ,
+    //     .swap_data = true,
+    // };
+
+    // scr_interface_driver_t *iface_drv;
+    // scr_interface_create(SCREEN_IFACE_SPI, &spi_lcd_cfg, &iface_drv);
+
+    // scr_controller_config_t lcd_cfg = {
+    //     .interface_drv = iface_drv,
+    //     .pin_num_rst = 18,
+    //     .pin_num_bckl = 23,
+    //     .rst_active_level = 0,
+    //     .bckl_active_level = 1,
+    //     .offset_hor = 0,
+    //     .offset_ver = 0,
+    //     .width = 240,
+    //     .height = 320,
+    //     .rotate = SCR_DIR_TBLR,
+    // };
+    // scr_find_driver(SCREEN_CONTROLLER_ILI9341, &lcd_drv);
+    // lcd_drv.init(&lcd_cfg);
+
+   i2s_lcd_config_t i2s_lcd_cfg = {
+        .data_width  = BOARD_LCD_I2S_BITWIDTH,
+        .pin_data_num = {
+            BOARD_LCD_I2S_D0_PIN,
+            BOARD_LCD_I2S_D1_PIN,
+            BOARD_LCD_I2S_D2_PIN,
+            BOARD_LCD_I2S_D3_PIN,
+            BOARD_LCD_I2S_D4_PIN,
+            BOARD_LCD_I2S_D5_PIN,
+            BOARD_LCD_I2S_D6_PIN,
+            BOARD_LCD_I2S_D7_PIN,
+            BOARD_LCD_I2S_D8_PIN,
+            BOARD_LCD_I2S_D9_PIN,
+            BOARD_LCD_I2S_D10_PIN,
+            BOARD_LCD_I2S_D11_PIN,
+            BOARD_LCD_I2S_D12_PIN,
+            BOARD_LCD_I2S_D13_PIN,
+            BOARD_LCD_I2S_D14_PIN,
+            BOARD_LCD_I2S_D15_PIN,
+        },
+        .pin_num_cs = BOARD_LCD_I2S_CS_PIN,
+        .pin_num_wr = BOARD_LCD_I2S_WR_PIN,
+        .pin_num_rs = BOARD_LCD_I2S_RS_PIN,
+
+        .clk_freq = 20000000,
+        .i2s_port = I2S_NUM_0,
+        .buffer_size = 32000,
         .swap_data = true,
     };
 
     scr_interface_driver_t *iface_drv;
-    scr_interface_create(SCREEN_IFACE_SPI, &spi_lcd_cfg, &iface_drv);
+    scr_interface_create(SCREEN_IFACE_8080, &i2s_lcd_cfg, &iface_drv);
 
+    ret = scr_find_driver(SCREEN_CONTROLLER_ST7796, &lcd_drv);
+    if (ESP_OK != ret) {
+        return;
+        ESP_LOGE(TAG, "screen find failed");
+    }
     scr_controller_config_t lcd_cfg = {
         .interface_drv = iface_drv,
-        .pin_num_rst = 18,
-        .pin_num_bckl = 23,
+        .pin_num_rst = BOARD_LCD_I2S_RESET_PIN,
+        .pin_num_bckl = BOARD_LCD_I2S_BL_PIN,
         .rst_active_level = 0,
         .bckl_active_level = 1,
         .offset_hor = 0,
         .offset_ver = 0,
-        .width = 240,
-        .height = 320,
-        .rotate = SCR_DIR_TBLR,
+        // .width = 480,
+        // .height = 854,
+        .width = 320,
+        .height = 480,
+        .rotate = SCR_DIR_LRBT, //portrait: SCR_DIR_LRBT; landscape: SCR_DIR_TBLR
     };
-    scr_find_driver(SCREEN_CONTROLLER_ILI9341, &lcd_drv);
-    lcd_drv.init(&lcd_cfg);
+    ret = lcd_drv.init(&lcd_cfg);    
 
-    touch_panel_config_t touch_cfg = {
-        .interface_spi = {
-            .spi_bus = spi2_bus,
-            .pin_num_cs = BOARD_TOUCH_SPI_CS_PIN,
-            .clk_freq = 10000000,
-        },
-        .interface_type = TOUCH_PANEL_IFACE_SPI,
-        .pin_num_int = -1,
-        .direction = TOUCH_DIR_TBLR,
-        .width = 240,
-        .height = 320,
-    };
-    touch_panel_find_driver(TOUCH_PANEL_CONTROLLER_XPT2046, &touch_drv);
-    touch_drv.init(&touch_cfg);
-    touch_drv.calibration_run(&lcd_drv, false);
+    // touch_panel_config_t touch_cfg = {
+    //     .interface_spi = {
+    //         .spi_bus = spi2_bus,
+    //         .pin_num_cs = BOARD_TOUCH_SPI_CS_PIN,
+    //         .clk_freq = 10000000,
+    //     },
+    //     .interface_type = TOUCH_PANEL_IFACE_SPI,
+    //     .pin_num_int = -1,
+    //     .direction = TOUCH_DIR_TBLR,
+    //     .width = 240,
+    //     .height = 320,
+    // };
+    // touch_panel_find_driver(TOUCH_PANEL_CONTROLLER_XPT2046, &touch_drv);
+    // touch_drv.init(&touch_cfg);
+    // touch_drv.calibration_run(&lcd_drv, false);
 
     /* Initialize LittlevGL GUI */
-    lvgl_init(&lcd_drv, &touch_drv);
+    // lvgl_init(&lcd_drv, &touch_drv);
+    lvgl_init(&lcd_drv, NULL);
 
     lvgl_acquire();
 #ifdef CONFIG_LV_DEMO_BENCHMARK
