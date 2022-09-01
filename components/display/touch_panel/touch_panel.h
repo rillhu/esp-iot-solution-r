@@ -120,7 +120,8 @@ typedef enum {
 typedef enum {
     /* Capacitive touch panel */
     TOUCH_PANEL_CONTROLLER_FT5X06,
-
+    TOUCH_PANEL_CONTROLLER_GT911,
+    
     /* Resistance touch panel */
     TOUCH_PANEL_CONTROLLER_XPT2046,
     TOUCH_PANEL_CONTROLLER_NS2016,

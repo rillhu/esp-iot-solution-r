@@ -32,6 +32,9 @@ extern touch_panel_driver_t ft5x06_default_driver;
 #ifdef CONFIG_TOUCH_DRIVER_NS2016
 extern touch_panel_driver_t ns2016_default_driver;
 #endif
+#ifdef CONFIG_TOUCH_DRIVER_GT911
+extern touch_panel_driver_t gt911_default_driver;
+#endif
 
 esp_err_t touch_panel_find_driver(touch_panel_controller_t controller, touch_panel_driver_t *out_driver)
 {
@@ -52,6 +55,11 @@ esp_err_t touch_panel_find_driver(touch_panel_controller_t controller, touch_pan
 #ifdef CONFIG_TOUCH_DRIVER_NS2016
     case TOUCH_PANEL_CONTROLLER_NS2016:
         *out_driver = ns2016_default_driver;
+        break;
+#endif
+#ifdef CONFIG_TOUCH_DRIVER_GT911
+    case TOUCH_PANEL_CONTROLLER_GT911:
+        *out_driver = gt911_default_driver;
         break;
 #endif
     default:
